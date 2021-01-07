@@ -56,7 +56,7 @@ public class VistaInicioSesion extends javax.swing.JFrame {
         lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
         lblUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/ups/iconos/usuario.png"))); // NOI18N
         lblUsuario.setText("CORREO");
-        getContentPane().add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, 220, -1));
+        getContentPane().add(lblUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 152, 220, 40));
 
         lblTitulo.setFont(new java.awt.Font("Verdana", 1, 36)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(255, 255, 255));
@@ -67,19 +67,19 @@ public class VistaInicioSesion extends javax.swing.JFrame {
         lblContraseña.setForeground(new java.awt.Color(255, 255, 255));
         lblContraseña.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/ups/iconos/contraseña.png"))); // NOI18N
         lblContraseña.setText("CONTRASEÑA");
-        getContentPane().add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 200, 240, -1));
+        getContentPane().add(lblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 200, 240, 40));
 
         pswContraseña.setFont(new java.awt.Font("Verdana", 0, 20)); // NOI18N
         pswContraseña.setMinimumSize(new java.awt.Dimension(90, 30));
         pswContraseña.setPreferredSize(new java.awt.Dimension(90, 30));
-        getContentPane().add(pswContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 200, 290, -1));
+        getContentPane().add(pswContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 200, 290, 40));
 
         txtUsuario.setFont(new java.awt.Font("Verdana", 0, 20)); // NOI18N
         txtUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtUsuario.setMaximumSize(new java.awt.Dimension(90, 30));
         txtUsuario.setMinimumSize(new java.awt.Dimension(90, 30));
         txtUsuario.setPreferredSize(new java.awt.Dimension(90, 30));
-        getContentPane().add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 160, 290, -1));
+        getContentPane().add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 150, 290, 40));
 
         lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/ups/iconos/fondo.jpg"))); // NOI18N
         getContentPane().add(lblFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1500, 700));

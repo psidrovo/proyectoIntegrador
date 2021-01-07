@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -86,7 +85,7 @@ public class Usuario extends Persona {
 
 
     public void crearUsuario(Usuario usuario) {
-        String sqlstm = "INSERT INTO  `unidadeducativa`.`usuario` (tipo,`correo`, `password`,) "
+        String sqlstm = "INSERT INTO  `parqueadero`.`usuario` (tipo,`correo`, `password`) "
                 + "VALUES ('" + usuario.getTipo()+ "', '" + usuario.getCorreo() + "', '" + usuario.getPassword() + "')";
         try {
             ConexionSql.getConnection();

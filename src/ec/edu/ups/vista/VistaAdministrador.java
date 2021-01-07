@@ -7,9 +7,16 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.ControladorParqueadero;
 import ec.edu.ups.modelo.ExpresionRegular;
+import ec.edu.ups.modelo.PDFReportes;
 import ec.edu.ups.modelo.Parqueadero;
 import ec.edu.ups.modelo.Tarifa;
 import ec.edu.ups.modelo.Usuario;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
@@ -53,7 +60,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
         dtFinal = new com.toedter.calendar.JDateChooser();
         dtInicio = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnReporte = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -101,9 +108,18 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
         jLabel4.setText("HASTA:");
 
+        dtFinal.setDateFormatString("yyyy-MM-dd");
+
+        dtInicio.setDateFormatString("yyyy-MM-dd");
+
         jLabel3.setText("DESDE:");
 
-        jButton2.setText("ABRIR REPORTE");
+        btnReporte.setText("ABRIR REPORTE");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -121,7 +137,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
                         .addGap(5, 5, 5)
                         .addComponent(dtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(btnReporte)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -139,7 +155,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
                             .addComponent(dtFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
-                        .addComponent(jButton2)))
+                        .addComponent(btnReporte)))
                 .addContainerGap())
         );
 
@@ -427,19 +443,32 @@ public class VistaAdministrador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        PDFReportes gen = new PDFReportes();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaInicio = simpleDateFormat.format(dtInicio.getDate());
+        String fechaFinal = simpleDateFormat.format(dtFinal.getDate());
+        gen.createPDF(new File("C:\\Programas Java\\UPS\\3ROCICLO\\Parqueadero\\Reportes\\REPORTE_VALORES.pdf"),
+                fechaInicio,fechaFinal);
+
+        File objetofile = new File("C:\\Programas Java\\UPS\\3ROCICLO\\Parqueadero\\Reportes\\REPORTE_VALORES.pdf");
+        try {
+            Desktop.getDesktop().open(objetofile);
+        } catch (IOException ex) {
+            
+        }
+    }//GEN-LAST:event_btnReporteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnActualizarParqueaderos;
     private javax.swing.JButton btnActualizarTarifa;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnReporte;
     private javax.swing.JComboBox<String> cmbUsuarios;
     private com.toedter.calendar.JDateChooser dtFinal;
     private com.toedter.calendar.JDateChooser dtInicio;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private com.toedter.calendar.JDateChooser jDateChooser3;
-    private com.toedter.calendar.JDateChooser jDateChooser4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -450,13 +479,10 @@ public class VistaAdministrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel lblId;

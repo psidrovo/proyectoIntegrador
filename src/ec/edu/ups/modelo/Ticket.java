@@ -11,13 +11,16 @@ import java.sql.ResultSet;
 import java.util.Date;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Paul Idrovo
  */
-public class Ticket {
+public class Ticket extends Usuario{
+
     private int id;
     private String tipo;
     private String fechaEntrada;
@@ -42,7 +45,6 @@ public class Ticket {
         this.usuario_id_cobro = usuario_id_cobro;
     }
 
-    
     public int getUsuario_id_ingreso() {
         return usuario_id_ingreso;
     }
@@ -58,9 +60,6 @@ public class Ticket {
     public void setUsuario_id_cobro(int usuario_id_cobro) {
         this.usuario_id_cobro = usuario_id_cobro;
     }
-
-    
-
 
     public int getId() {
         return id;
@@ -94,7 +93,6 @@ public class Ticket {
         this.fechaSalida = fechaSalida;
     }
 
-   
     public double getValor() {
         return valor;
     }
@@ -118,10 +116,10 @@ public class Ticket {
     public void setParqueadero_id(int parqueadero_id) {
         this.parqueadero_id = parqueadero_id;
     }
-    
+
     public boolean crearTicket(Ticket ticket) {
         String sqlstm = "INSERT INTO  `parqueadero`.`ticket` (`tipo`, `fechaEntrada`,`fechaSalida`,`valor`,vehiculo_id, usuario_id_ingreso, usuario_id_cobro,parqueaderoNumero) "
-                + "VALUES ('" + ticket.getTipo()+ "', " + ticket.getFechaEntrada()+ "," + ticket.getFechaSalida()+ ", '" + ticket.getValor()+"','" + ticket.getVehiculo_id()+ "','" + ticket.getUsuario_id_ingreso()+ "','" + ticket.getUsuario_id_cobro()+ "','" + ticket.getParqueadero_id()+ "')";
+                + "VALUES ('" + ticket.getTipo() + "', " + ticket.getFechaEntrada() + "," + ticket.getFechaSalida() + ", '" + ticket.getValor() + "','" + ticket.getVehiculo_id() + "','" + ticket.getUsuario_id_ingreso() + "','" + ticket.getUsuario_id_cobro() + "','" + ticket.getParqueadero_id() + "')";
         try {
             ConexionSql.getConnection();
             Connection conn = ConexionSql.getConn();
@@ -147,7 +145,7 @@ public class Ticket {
     }
 
     public Ticket recuperarDatos(int id) {
-         String sqlstm = "SELECT * FROM  `parqueadero`.ticket where id = "+id;
+        String sqlstm = "SELECT * FROM  `parqueadero`.ticket where id = " + id;
         try {
             ConexionSql.getConnection();
             Connection conn = ConexionSql.getConn();
@@ -157,14 +155,11 @@ public class Ticket {
             rs = stmt.executeQuery(sqlstm);
             while (rs.next()) {
                 Ticket tk = new Ticket();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                tk.setFechaEntrada(simpleDateFormat.format(new Date (rs.getTimestamp("fechaEntrada").getTime())));
-                java.sql.Timestamp stamp = rs.getTimestamp("fechaSalida");
-                if(stamp!=null){
-                    tk.setFechaSalida(simpleDateFormat.format(new Date (stamp.getTime())));
-                }
+                tk.setFechaEntrada(rs.getString("fechaEntrada"));
+                tk.setFechaSalida(rs.getString("fechaSalida"));
                 tk.setTipo(rs.getString("tipo"));
                 tk.setValor(rs.getDouble("valor"));
+                tk.setParqueadero_id(rs.getInt("parqueaderoNumero"));
                 tk.setVehiculo_id(rs.getInt("vehiculo_id"));
                 return tk;
             }
@@ -177,6 +172,50 @@ public class Ticket {
         }
         return null;
     }
-    
-    
+
+    public List<Ticket> getTicketFecha(String fechaInicio, String fechaFinal) {
+        List<Ticket> tickets = new ArrayList<>();
+        String sqlstm = "select pt.id, pt.tipo, pt.fechaEntrada, pt.fechaSalida, pt.valor, vh.placa, pr.cedula, us.correo from parqueadero.ticket as pt \n"
+                + "inner join parqueadero.vehiculo as vh on vh.id=pt.vehiculo_id \n"
+                + "inner join parqueadero.persona as pr on pr.id=vh.persona_id \n"
+                + "inner join parqueadero.usuario as us on us.id=pt.usuario_id_cobro\n"
+                + " where (fechaEntrada between '" + fechaInicio + "' and '" + fechaFinal + "') and valor != 0.0";
+        try {
+            ConexionSql.getConnection();
+            Connection conn = ConexionSql.getConn();//Direcion
+            Statement stmt = conn.createStatement();//Puerta
+            ResultSet rs; //Resultados
+            rs = stmt.executeQuery(sqlstm);
+            while (rs.next()) {
+                Ticket tk = new Ticket();
+                tk.setId(rs.getInt("id"));
+                tk.setTipo(rs.getString("tipo"));
+                tk.setFechaEntrada(rs.getString("fechaEntrada"));
+                tk.setFechaSalida(rs.getString("fechaSalida"));
+                tk.setValor(rs.getDouble("valor"));
+                tk.setCorreo(rs.getString("correo"));
+                tk.setCedula(rs.getString("cedula"));
+                tk.setDireccion(rs.getString("placa"));
+                tickets.add(tk);
+            }
+            stmt.close();
+            rs.close();
+        } catch (Exception e) {
+
+        }
+        return tickets;
+    }
+
+    public void setPago(Ticket tk) {
+        String sqlstm = "UPDATE  `parqueadero`.ticket SET valor  = '" + tk.getValor() + "', fechaSalida = '"+tk.getFechaSalida()+"' WHERE id = " + tk.getId();
+        try {     
+            ConexionSql.getConnection();
+            Connection conn = ConexionSql.getConn();                        
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sqlstm);                
+            
+        } catch (Exception e) {
+        }
+    }
+
 }

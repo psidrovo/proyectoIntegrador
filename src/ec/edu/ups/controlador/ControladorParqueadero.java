@@ -23,7 +23,7 @@ public class ControladorParqueadero {
             parqueadero.eliminarDatosParqueadero();
             int cont = 0;
             for (int i = 1; i <= num; i++) {
-                if (numeroParqueaderosOcupados.size()>0) {
+                if (numeroParqueaderosOcupados.size()>cont) {
                     if (numeroParqueaderosOcupados.get(cont).getNumero() == i) {
                         parqueadero.crearParqueadero(numeroParqueaderosOcupados.get(cont));
                         cont++;

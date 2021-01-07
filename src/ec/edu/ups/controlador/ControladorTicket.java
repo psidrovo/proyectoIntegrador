@@ -19,4 +19,11 @@ public class ControladorTicket {
         Parqueadero prq = new Parqueadero();
         prq.ActualizarParqieadero(tk.getParqueadero_id(),"RESERVADO");
     }
+
+    public void setPagarParqueadero(Ticket ticket) {
+        Ticket tk = ticket;
+        tk.setPago(tk);
+        Parqueadero prq = new Parqueadero();
+        prq.ActualizarParqieadero(tk.getParqueadero_id(), "DISPONIBLE");
+    }
 }

@@ -16,7 +16,7 @@ public class ConexionSql {
     private static  String user = "ejemplos";
     private static final String password = "ejemplos"; 
     
-    private static final String url = "jdbc:mysql://localhost:3306/unidadeducativa?serverTimezone=UTC";
+    private static final String url = "jdbc:mysql://localhost:3306/parqueadero?serverTimezone=UTC";
 
     public static Connection getConn() {
         return connex;

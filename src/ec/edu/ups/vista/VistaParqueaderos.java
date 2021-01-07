@@ -1,5 +1,7 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.ControladorTicket;
+import ec.edu.ups.modelo.ExpresionRegular;
 import ec.edu.ups.modelo.Parqueadero;
 import ec.edu.ups.modelo.Tarifa;
 import ec.edu.ups.modelo.Ticket;
@@ -9,11 +11,16 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,12 +40,17 @@ public class VistaParqueaderos extends javax.swing.JFrame {
         lblT1.setVisible(false);
         lblT2.setVisible(false);
         lblT3.setVisible(false);
-        List<Tarifa> listaTarifas = new Tarifa().TarifasMembresia();
+        List<Tarifa> listaTarifas = new Tarifa().TarifasRegular();
         lblT1.setText(listaTarifas.get(0).getValorTarifa() + "");
         lblT2.setText(listaTarifas.get(1).getValorTarifa() + "");
         lblT3.setText(listaTarifas.get(2).getValorTarifa() + "");
         txtCodigoTicket.setForeground(Color.GRAY);
-        pnlParqueaderos.setLayout(new GridLayout(4, 10));
+        espaciosParqueadero();
+    }
+
+    private void espaciosParqueadero(){
+        pnlParqueaderos.removeAll();
+        pnlParqueaderos.setLayout(new GridLayout(3, 6));
         lblParqueaderos = new ArrayList<>();
         List<Parqueadero> listaParqueadero = new Parqueadero().getParqueaderos();
         int cont = 1;
@@ -89,16 +101,9 @@ public class VistaParqueaderos extends javax.swing.JFrame {
             lblParqueaderos.add(labelParqueadero);
             cont++;
         }
-        for (int i = 0; i < 200; i++) {
-
-        }
-
-        pnlParqueaderos.setSize(100, 100);
-        scpParqueaderos.setSize(100, 100);
         scpParqueaderos.updateUI();
         pnlParqueaderos.updateUI();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -117,7 +122,7 @@ public class VistaParqueaderos extends javax.swing.JFrame {
         lblT2 = new javax.swing.JLabel();
         lblT3 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        pnlParqueaderos.setBackground(new java.awt.Color(102, 102, 102));
 
         javax.swing.GroupLayout pnlParqueaderosLayout = new javax.swing.GroupLayout(pnlParqueaderos);
         pnlParqueaderos.setLayout(pnlParqueaderosLayout);
@@ -246,54 +251,54 @@ public class VistaParqueaderos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPagarActionPerformed
 
     private void btnPagar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagar1ActionPerformed
-        Ticket tk = new Ticket();
-        tk = tk.recuperarDatos(Integer.parseInt(txtCodigoTicket.getText()));
-        Date tiempo = new Date(tk.getFechaEntrada());
-        Date actual = new Date();
-        
-        var dias = (actual.getTime() - tiempo.getTime())/60000;
+        ExpresionRegular exp = new ExpresionRegular();
+        exp.ingresarRegex("^\\d+$");
+        if (exp.validar(txtCodigoTicket.getText())) {
+            Ticket tk = new Ticket();
+            tk = tk.recuperarDatos(Integer.parseInt(txtCodigoTicket.getText()));
+            DateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date tiempo = null;
+            try {
+                tiempo = formato.parse(tk.getFechaEntrada());
+            } catch (ParseException ex) {
+                Logger.getLogger(VistaParqueaderos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Date actual = new Date();
 
-        System.out.println("Hay " + dias + " dias de diferencia");
-        System.out.println(tiempo);
-        System.out.println(actual);
-
-    }//GEN-LAST:event_btnPagar1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+            double minutos = (actual.getTime() - tiempo.getTime()) / 60000;
+            int horas = (int) minutos / 60;
+            int mediaHora = 0;
+            int cuartoHora = 0;
+            double minutosExtras = minutos / 60;
+            minutosExtras = minutosExtras - horas;
+            if (minutosExtras > 0.5) {
+                horas++;
+            } else {
+                mediaHora = (int) (minutosExtras * 2);
+                minutosExtras = (minutosExtras * 2) - mediaHora;
+                if (minutosExtras > 0.5) {
+                    mediaHora++;
+                } else {
+                    cuartoHora++;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaParqueaderos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaParqueaderos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaParqueaderos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaParqueaderos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+            double total = (horas * Double.parseDouble(lblT1.getText())) + (mediaHora * Double.parseDouble(lblT2.getText())) + (cuartoHora * Double.parseDouble(lblT3.getText()));
+            DecimalFormat df = new DecimalFormat("#.00");
+            int confirmado = JOptionPane.showConfirmDialog(null, "EL VALOR A PAGAR ES DE $" + df.format(total) + " CONTINUAR ?");
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VistaParqueaderos().setVisible(true);
+            if (JOptionPane.OK_OPTION == confirmado) {
+                ControladorTicket controladorTicket = new ControladorTicket();
+                tk.setValor(total);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                tk.setFechaSalida(simpleDateFormat.format(new Date()));
+                controladorTicket.setPagarParqueadero(tk);
+                espaciosParqueadero();
             }
-        });
-    }
+        } else {
+            JOptionPane.showMessageDialog(null, "CODIGO NO VALIDO", "ERROR DE DATOS", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnPagar1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPagar;
