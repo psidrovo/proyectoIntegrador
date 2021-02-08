@@ -1,11 +1,11 @@
 package ec.edu.ups.vista;
 
-
 import ec.edu.ups.controlador.ControladorUsuario;
 import ec.edu.ups.modelo.Usuario;
 import ec.edu.ups.modelo.ValidarSesion;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
@@ -15,7 +15,7 @@ public class VistaInicioSesion extends javax.swing.JFrame {
 
     private ControladorUsuario controladorUsuario;
 
-    public VistaInicioSesion() {        
+    public VistaInicioSesion() {
         initComponents();
         this.setLocationRelativeTo(null);
         setIconImage(new ImageIcon(getClass().getResource("/ec/edu/ups/iconos/Icono.png")).getImage());
@@ -103,10 +103,10 @@ public class VistaInicioSesion extends javax.swing.JFrame {
             vlSesion.setTipo(us.getTipo());
             JOptionPane.showMessageDialog(null, "BIENVENIDO", "LOGIN", JOptionPane.INFORMATION_MESSAGE);
             this.setVisible(false);
-            if(us.getTipo().equals("ADMINISTRADOR")){
+            if (us.getTipo().equals("ADMINISTRADOR")) {
                 VistaAdministrador vsAdministrador = new VistaAdministrador();
                 vsAdministrador.setVisible(true);
-            }else{
+            } else {
                 VistaParqueaderos vsParqueaderos = new VistaParqueaderos();
                 vsParqueaderos.setVisible(true);
             }
@@ -146,11 +146,12 @@ public class VistaInicioSesion extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VistaInicioSesion().setVisible(true);
                 try {
-                    javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+                    UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
                 } catch (Exception e) {
+
                 }
+                new VistaInicioSesion().setVisible(true);                
             }
         });
     }

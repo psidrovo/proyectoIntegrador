@@ -100,7 +100,7 @@ public class Usuario extends Persona {
 
     public List<Usuario> getListaUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
-        String sqlstm = "Select * from parqueadero.usuario where tipo = 'user'";
+        String sqlstm = "Select * from parqueadero.usuario where tipo = 'USUARIO'";
         try {
             ConexionSql.getConnection();
             Connection conn = ConexionSql.getConn();//Direcion

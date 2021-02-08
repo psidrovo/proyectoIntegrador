@@ -8,6 +8,7 @@ package ec.edu.ups.vista;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import ec.edu.ups.controlador.ControladorTicket;
 import ec.edu.ups.modelo.ExpresionRegular;
+import ec.edu.ups.modelo.HiloMovimiento;
 import ec.edu.ups.modelo.Persona;
 import ec.edu.ups.modelo.Tarifa;
 import ec.edu.ups.modelo.Ticket;
@@ -496,7 +497,9 @@ public class VistaCliente extends javax.swing.JFrame {
             controladorTicket.crearTicket(new Ticket(tipoTicket, fechaEntrada, fechaSalida, valorTicket, placaId, parqueaderoId, vs.getId(), idsalida));
             List<JLabel> lblParqueadero = this.vistaParqueaderos.getLblParqueaderos();
             parqueaderoId--;
-            lblParqueadero.get(parqueaderoId).setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/ups/iconos/v" + this.vistaParqueaderos.getValorDado() + ".png")));
+            var thread = new Thread(new HiloMovimiento(vistaParqueaderos, parqueaderoId));
+            thread.start();
+            //lblParqueadero.get(parqueaderoId).setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/ups/iconos/v" + this.vistaParqueaderos.getValorDado() + ".png")));
             this.vistaParqueaderos.setLblParqueaderos(lblParqueadero);
             this.vistaParqueaderos.setEnabled(true);
             this.setVisible(false);
@@ -594,7 +597,7 @@ public class VistaCliente extends javax.swing.JFrame {
             txtCedula.setEnabled(false);
             txtCedula.setText("9999999999");
             Persona p = new Persona();
-            p = p.getPersona(txtCedula.getText());            
+            p = p.getPersona(txtCedula.getText());
             txtNombre.setText("CONSUMIDOR FINAL");
             txtApellido.setText(" ");
             txtDireccion.setText("S/N");
@@ -605,7 +608,7 @@ public class VistaCliente extends javax.swing.JFrame {
             vehiculo.getPlacasCedula(p.getId()).forEach(vh -> {
                 placasAt.addItem(vh.getPlaca());
             });
-        } else {            
+        } else {
             txtCedula.setEnabled(true);
             txtNombre.setText("");
             txtApellido.setText("");

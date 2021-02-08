@@ -2,6 +2,7 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.ControladorTicket;
 import ec.edu.ups.modelo.ExpresionRegular;
+import ec.edu.ups.modelo.HiloMovimiento;
 import ec.edu.ups.modelo.Parqueadero;
 import ec.edu.ups.modelo.Tarifa;
 import ec.edu.ups.modelo.Ticket;
@@ -27,7 +28,7 @@ import javax.swing.JOptionPane;
 
 public class VistaParqueaderos extends javax.swing.JFrame {
 
-    private List<JLabel> lblParqueaderos;
+    public List<JLabel> lblParqueaderos;
     private VistaParqueaderos vistaParqueaderos;
     private int valorDado;
 
@@ -48,12 +49,14 @@ public class VistaParqueaderos extends javax.swing.JFrame {
         espaciosParqueadero();
     }
 
-    private void espaciosParqueadero(){
+    private void espaciosParqueadero() {
         pnlParqueaderos.removeAll();
-        pnlParqueaderos.setLayout(new GridLayout(3, 6));
         lblParqueaderos = new ArrayList<>();
         List<Parqueadero> listaParqueadero = new Parqueadero().getParqueaderos();
         int cont = 1;
+        int pos = 1;
+        int posicionX = 20;
+        int posicionY = 20;
         for (Parqueadero parqueadero : listaParqueadero) {
             JLabel labelParqueadero = new JLabel(cont + "");
             labelParqueadero.setVerticalTextPosition(JLabel.CENTER);
@@ -65,7 +68,7 @@ public class VistaParqueaderos extends javax.swing.JFrame {
             } else {
                 labelParqueadero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/edu/ups/iconos/v" + valorDado + ".png")));
             }
-            labelParqueadero.setBounds(cont * 90, 50, 90, 110);
+            labelParqueadero.setBounds(posicionX, posicionY, 90, 250);
             labelParqueadero.setFont(new Font("Verdana", Font.BOLD, 18));
 
             labelParqueadero.addMouseListener(new MouseListener() {
@@ -73,6 +76,9 @@ public class VistaParqueaderos extends javax.swing.JFrame {
                 public void mouseClicked(MouseEvent e) {
                     String icono = labelParqueadero.getIcon().toString();
                     if (icono.equals("file:/C:/Programas%20Java/UPS/3ROCICLO/Parqueadero/build/classes/ec/edu/ups/iconos/espacioLibre.png")) {
+                        /*int numero = Integer.parseInt(labelParqueadero.getText()) - 1;
+                        var thread = new Thread(new HiloMovimiento(vistaParqueaderos, numero));
+                        thread.start();*/
                         vistaParqueaderos.setEnabled(false);
                         VistaCliente cl = new VistaCliente(vistaParqueaderos, Integer.parseInt(labelParqueadero.getText()));
                         cl.setVisible(true);
@@ -100,10 +106,20 @@ public class VistaParqueaderos extends javax.swing.JFrame {
             pnlParqueaderos.add(labelParqueadero);
             lblParqueaderos.add(labelParqueadero);
             cont++;
+            pos++;
+            posicionX += 90;
+            if (pos > 10) {
+                pnlParqueaderos.setPreferredSize(new java.awt.Dimension(posicionX, pnlParqueaderos.getHeight() - 40));
+                posicionX = 20;
+                posicionY += 300;
+                pos = 1;
+            }
         }
+        pnlParqueaderos.setPreferredSize(new java.awt.Dimension(pnlParqueaderos.getHeight(), posicionY + 400));
         scpParqueaderos.updateUI();
         pnlParqueaderos.updateUI();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -306,7 +322,7 @@ public class VistaParqueaderos extends javax.swing.JFrame {
     private javax.swing.JLabel lblT1;
     private javax.swing.JLabel lblT2;
     private javax.swing.JLabel lblT3;
-    private javax.swing.JPanel pnlParqueaderos;
+    public javax.swing.JPanel pnlParqueaderos;
     private javax.swing.JScrollPane scpParqueaderos;
     private javax.swing.JTextField txtCodigoTicket;
     // End of variables declaration//GEN-END:variables

@@ -66,6 +66,29 @@ public class Tarifa {
         }
     }
 
+    public List<Tarifa> TarifasValores() {
+        List<Tarifa> tarifas = new ArrayList<>();
+        String sqlstm = "Select * from parqueadero.tarifa";
+        try {
+            ConexionSql.getConnection();
+            Connection conn = ConexionSql.getConn();//Direcion
+            Statement stmt = conn.createStatement();//Puerta
+            ResultSet rs; //Resultados
+            rs = stmt.executeQuery(sqlstm);
+            while (rs.next()) {
+                Tarifa tf = new Tarifa();
+                tf.setTipo(rs.getString("tipo"));
+                tf.setValorTarifa(rs.getDouble("valorTarifa"));
+                tarifas.add(tf);
+            }
+            stmt.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("ERROR LISTA DE DOCENTES");
+        }
+        return tarifas;
+    }
+    
     public List<Tarifa> TarifasMembresia() {
         List<Tarifa> tarifas = new ArrayList<>();
         String sqlstm = "Select * from parqueadero.tarifa where id > 3";

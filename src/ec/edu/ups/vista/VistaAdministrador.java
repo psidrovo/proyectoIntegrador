@@ -15,6 +15,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -36,10 +37,11 @@ public class VistaAdministrador extends javax.swing.JFrame {
         cmbUsuarios.addItem("SELECIONAR USUARIO");
         Usuario us = new Usuario();
         us.getListaUsuarios().forEach(listaUsuario -> {
-            cmbUsuarios.addItem(listaUsuario.getId() + " - " +listaUsuario.getCorreo());
+            cmbUsuarios.addItem(listaUsuario.getId() + " - " + listaUsuario.getCorreo());
         });
         controladorParqueadero = new ControladorParqueadero();
         lblId.setVisible(false);
+        cargarTarifas();
     }
 
     /**
@@ -86,6 +88,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
         txtPassword = new javax.swing.JTextField();
         btnActualizar = new javax.swing.JButton();
         lblId = new javax.swing.JLabel();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -272,8 +275,6 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("USUARIOS"));
 
-        cmbUsuarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         btnEditar.setText("EDITAR");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -342,13 +343,20 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
         lblId.setText("jLabel16");
 
+        btnRegresar.setText("REGRESAR");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -357,17 +365,18 @@ public class VistaAdministrador extends javax.swing.JFrame {
                         .addComponent(spnNumParqueaderos, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
                         .addComponent(btnActualizarParqueaderos))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(50, 50, 50)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnRegresar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(lblId))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGap(50, 50, 50)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblId)
-                .addGap(78, 78, 78))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -379,14 +388,18 @@ public class VistaAdministrador extends javax.swing.JFrame {
                     .addComponent(spnNumParqueaderos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnActualizarParqueaderos))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(35, 35, 35)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addComponent(lblId))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblId)
+                            .addComponent(btnRegresar))))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         pack();
@@ -437,7 +450,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
         if (ex.validar(cmbUsuarios.getSelectedItem().toString())) {
             lblId.setText(ex.obtenerId(cmbUsuarios.getSelectedItem().toString()) + "");
             Usuario us = new Usuario();
-            us.extraerDatos(ex.obtenerId(cmbUsuarios.getSelectedItem().toString()));
+            us = us.extraerDatos(ex.obtenerId(cmbUsuarios.getSelectedItem().toString()));
             txtCorreo.setText(us.getCorreo());
             txtPassword.setText(us.getPassword());
         }
@@ -449,22 +462,41 @@ public class VistaAdministrador extends javax.swing.JFrame {
         String fechaInicio = simpleDateFormat.format(dtInicio.getDate());
         String fechaFinal = simpleDateFormat.format(dtFinal.getDate());
         gen.createPDF(new File("C:\\Programas Java\\UPS\\3ROCICLO\\Parqueadero\\Reportes\\REPORTE_VALORES.pdf"),
-                fechaInicio,fechaFinal);
+                fechaInicio, fechaFinal);
 
         File objetofile = new File("C:\\Programas Java\\UPS\\3ROCICLO\\Parqueadero\\Reportes\\REPORTE_VALORES.pdf");
         try {
             Desktop.getDesktop().open(objetofile);
         } catch (IOException ex) {
-            
+
         }
     }//GEN-LAST:event_btnReporteActionPerformed
 
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        this.setVisible(false);
+        VistaInicioSesion vs = new VistaInicioSesion();
+        vs.setVisible(true);
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void cargarTarifas() {
+        Tarifa trf = new Tarifa();
+        List<Tarifa> datos = trf.TarifasValores();
+        spn1.setValue(datos.get(0).getValorTarifa());
+        spn2.setValue(datos.get(1).getValorTarifa());
+        spn3.setValue(datos.get(2).getValorTarifa());
+        spn4.setValue(datos.get(3).getValorTarifa());
+        spn5.setValue(datos.get(4).getValorTarifa());
+        spn6.setValue(datos.get(5).getValorTarifa());
+        spn7.setValue(datos.get(6).getValorTarifa());
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnActualizarParqueaderos;
     private javax.swing.JButton btnActualizarTarifa;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnReporte;
     private javax.swing.JComboBox<String> cmbUsuarios;
     private com.toedter.calendar.JDateChooser dtFinal;
